@@ -1,10 +1,9 @@
 let button;
-let lineSize = 1; 
 let slider;
 let checkbox;
+let colorPicker;
+
 let lineCol;
-
-
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -12,33 +11,38 @@ function setup() {
 
     lineCol = color(0, 0, 0);
 
-    slider = createSlider(0, 18, 1);
-    slider.position(5, 400);
-    slider.style('width', '80px');
+    colorPicker = createColorPicker('#ed225d');
+    colorPicker.position(10, 350);
 
-    checkbox = createCheckbox('eraser', false);
-    checkbox.position(100, 10);
+    slider = createSlider(0, 18, 1);
+    slider.position(5, 300);
+    slider.style('width', '60px');
+
+    checkbox = createCheckbox('Eraser', false);
+    checkbox.position(5, 450);
     checkbox.changed(eraserCheckedEvent);
 
     textAlign(CENTER);
+    textSize(15);
+    text('Size', 30, 200);   
 }
 
 function draw() {
+    let lineSize = slider.value();
+    strokeWeight(lineSize);
 
-    let val = slider.value();
-    strokeWeight(val);
+    lineCol = colorPicker.color();
     
     if (mouseIsPressed && mouseButton == LEFT) {
-      stroke(lineCol);
-      line(mouseX, mouseY, pmouseX, pmouseY);
+        stroke(lineCol);
+        line(mouseX, mouseY, pmouseX, pmouseY);
     }
 
+    //color buttons
     noStroke();
-    //draw the first button
     fill("red");
     rect(0, 0, 30, 30);
 
-    //draw the second button
     fill("orange");
     rect(30, 0, 30, 30);
 
@@ -115,6 +119,4 @@ function mousePressed() {
         lineCol = "white";
     }
      
-     
- 
 }
