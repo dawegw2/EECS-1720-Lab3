@@ -5,17 +5,25 @@ let colorPicker;
 
 let lineCol;
 
+let colSys = false;
+
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    background(51);
+    background(255);
+    img = createImg('https://icons.iconarchive.com/icons/icons8/windows-8/64/Editing-Eraser-icon.png');
+
+    fill(127,88,167);
+    rect(10, 250, 30, 30);
+    image(img, 10, 250, 30, 30);
+
 
     lineCol = color(0, 0, 0);
 
-    colorPicker = createColorPicker('#ed225d');
-    colorPicker.position(10, 350);
+    colorPicker = createColorPicker('black');
+    colorPicker.position(10, 260);
 
-    slider = createSlider(0, 18, 1);
-    slider.position(5, 300);
+    slider = createSlider(0, 18, 2);
+    slider.position(5, 315);
     slider.style('width', '60px');
 
     checkbox = createCheckbox('Eraser', false);
@@ -24,16 +32,15 @@ function setup() {
 
     textAlign(CENTER);
     textSize(15);
-    text('Size', 30, 200);   
+    text('Size', 30, 220);
+    //text('Eraser', 30, 300);    
 }
 
 function draw() {
     let lineSize = slider.value();
     strokeWeight(lineSize);
-
-    lineCol = colorPicker.color();
     
-    if (mouseIsPressed && mouseButton == LEFT) {
+    if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
         stroke(lineCol);
         line(mouseX, mouseY, pmouseX, pmouseY);
     }
@@ -69,6 +76,10 @@ function draw() {
 
     fill("white");
     rect(30, 120, 30, 30);
+
+    //eraser button
+ 
+    
 }
 
 function changeStrokeSize() {
@@ -76,8 +87,6 @@ function changeStrokeSize() {
 }
 
 function eraserCheckedEvent() {
-
-    let prevCol = lineCol;
 
     if (checkbox.checked()) {
         lineCol = color(255, 255, 255);
@@ -88,35 +97,55 @@ function eraserCheckedEvent() {
 }
 
 function mousePressed() {
+    
+    if (mouseX > 0 && mouseX < 60 && mouseY > 160 && mouseY < 190) {
+        lineCol = colorPicker.color();
+        cursor(CROSS);
+    }
+    
     if (mouseX > 0 && mouseX < 30 && mouseY > 0 && mouseY < 30) {
         lineCol = "red";
+        cursor(CROSS);
     }
     if (mouseX > 30 && mouseX < 60 && mouseY > 0 && mouseY < 30) {
         lineCol = "orange";
+        cursor(CROSS);
     }
     if (mouseX > 0 && mouseX < 30 && mouseY > 30 && mouseY < 60) {
         lineCol = "yellow";
+        cursor(CROSS);
     }
     if (mouseX > 30 && mouseX < 60 && mouseY > 30 && mouseY < 60) {
         lineCol = "green";
+        cursor(CROSS);
     }
     if (mouseX > 0 && mouseX < 30 && mouseY > 60 && mouseY < 90) {
         lineCol = "blue";
+        cursor(CROSS);
     }
     if (mouseX > 30 && mouseX < 60 && mouseY > 60 && mouseY < 90) {
         lineCol = "purple";
+        cursor(CROSS);
     }
     if (mouseX > 0 && mouseX < 30 && mouseY > 90 && mouseY < 120) {
         lineCol = "brown";
+        cursor(CROSS);
     }
     if (mouseX > 30 && mouseX < 60 && mouseY > 90 && mouseY < 120) {
         lineCol = "grey";
+        cursor(CROSS);
     }
     if (mouseX > 0 && mouseX < 30 && mouseY > 120 && mouseY < 150) {
         lineCol = "black";
+        cursor(CROSS);
     }
     if (mouseX > 30 && mouseX < 60 && mouseY > 120 && mouseY < 150) {
         lineCol = "white";
+        cursor(CROSS);
     }
-     
+
+    if (mouseX > 0 && mouseX < 60 && mouseY > 250 && mouseY < 280) {
+        lineCol = "white";
+        cursor('https://icons.iconarchive.com/icons/pixture/stationary/16/Eraser-2-icon.png');
+    }   
 }
