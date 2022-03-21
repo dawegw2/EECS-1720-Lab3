@@ -2,10 +2,11 @@ let button;
 let slider;
 let checkbox;
 let colorPicker;
-
 let lineCol;
 
 let colSys = false;
+
+let socket;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -33,7 +34,10 @@ function setup() {
     textAlign(CENTER);
     textSize(15);
     text('Size', 30, 220);
-    //text('Eraser', 30, 300);    
+    //text('Eraser', 30, 300);   
+    
+    socket = io.connect('http://1127.0.0.1:5000'); //connect to the server
+
 }
 
 function draw() {

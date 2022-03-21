@@ -1,11 +1,19 @@
 from flask import Flask, render_template
+from flask_socketio import SocketIO, send
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'thisisasecret'
+socketio = SocketIO(app)
 
-@app.route("/")
-def index():
+@socketio.on('message')
+def handleMessage(msg):
+    print('Message: ' + msg)
+    send(msg, broadcast=True)
+#@app.route("/")
+#def index():
     # Render HTML with count variable
-    return render_template("index.html")
+    #return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app)
+   # app.run()
