@@ -36,7 +36,18 @@ function setup() {
     text('Size', 30, 220);
     //text('Eraser', 30, 300);   
     
-    socket = io.connect('http://1127.0.0.1:5000'); //connect to the server
+   // socket = io.connect('http://1127.0.0.1:5000'); //connect to the server
+   // socket.on('connect', function(){
+      //  socket.send('connected')
+    //});
+
+    socket = io();
+    socket.connect('http://127.0.0.1:5000');
+    socket.on('connect', function(){
+        socket.send('connected');
+    });
+
+    socket.on('update value', newDrawing);
 
 }
 
@@ -45,6 +56,21 @@ function draw() {
     strokeWeight(lineSize);
     
     if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
+        console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
+
+        let data = {
+            x: mouseX,
+            y: mouseY,
+            pX: pmouseX,
+            pY: pmouseY
+        }
+
+        //socket.on('message', function(data){
+          //  console.log()
+        //})
+        
+        socket.emit('mouse', data);
+
         stroke(lineCol);
         line(mouseX, mouseY, pmouseX, pmouseY);
     }
@@ -81,10 +107,16 @@ function draw() {
     fill("white");
     rect(30, 120, 30, 30);
 
-    //eraser button
- 
-    
+    //eraser button   
 }
+
+function newDrawing(data) {
+    stroke(lineCol);
+    line(data.x, data.y, data.pX, data.pY);
+}
+
+
+
 
 function changeStrokeSize() {
     lineSize = this.value();
