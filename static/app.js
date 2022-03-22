@@ -2,23 +2,22 @@ let button;
 let slider;
 let checkbox;
 let colorPicker;
-let lineCol;
-
-let colSys = false;
+let lineCol = 0;
 
 let socket;
+
+let triggerOnce = true;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     background(255);
-    img = createImg('https://icons.iconarchive.com/icons/icons8/windows-8/64/Editing-Eraser-icon.png');
+    //img = createImg('https://icons.iconarchive.com/icons/icons8/windows-8/64/Editing-Eraser-icon.png');
 
     fill(127,88,167);
     rect(10, 250, 30, 30);
-    image(img, 10, 250, 30, 30);
+    //image(img, 10, 250, 30, 30);
 
-
-    lineCol = color(0, 0, 0);
+    //lineCol = color(0, 0, 0);
 
     colorPicker = createColorPicker('black');
     colorPicker.position(10, 260);
@@ -48,32 +47,11 @@ function setup() {
     });
 
     socket.on('update value', newDrawing);
-
 }
 
 function draw() {
     let lineSize = slider.value();
     strokeWeight(lineSize);
-    
-    if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
-        console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
-
-        let data = {
-            x: mouseX,
-            y: mouseY,
-            pX: pmouseX,
-            pY: pmouseY
-        }
-
-        //socket.on('message', function(data){
-          //  console.log()
-        //})
-        
-        socket.emit('mouse', data);
-
-        stroke(lineCol);
-        line(mouseX, mouseY, pmouseX, pmouseY);
-    }
 
     //color buttons
     noStroke();
@@ -105,35 +83,46 @@ function draw() {
     rect(0, 120, 30, 30);
 
     fill("white");
-    rect(30, 120, 30, 30);
+    rect(30, 120, 30, 30); 
+}
 
-    //eraser button   
+function mouseDragged() {
+    if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
+        console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
+
+        let data = {
+            x: mouseX,
+            y: mouseY,
+            pX: pmouseX,
+            pY: pmouseY,
+            col: lineCol
+        }
+
+        socket.emit('mouse', data);
+
+        stroke(lineCol);
+        line(mouseX, mouseY, pmouseX, pmouseY);
+    }
 }
 
 function newDrawing(data) {
-    stroke(lineCol);
+    stroke(data.col);
     line(data.x, data.y, data.pX, data.pY);
 }
-
-
-
 
 function changeStrokeSize() {
     lineSize = this.value();
 }
 
 function eraserCheckedEvent() {
-
     if (checkbox.checked()) {
         lineCol = color(255, 255, 255);
     } else {
         lineCol = color(0, 0, 0);
     }
-
 }
 
 function mousePressed() {
-    
     if (mouseX > 0 && mouseX < 60 && mouseY > 160 && mouseY < 190) {
         lineCol = colorPicker.color();
         cursor(CROSS);
