@@ -15,12 +15,11 @@ def handleMessage(msg):
     print('Message: ' + msg)
     send(msg, broadcast=True)
 
-@socketio.on('mouse')
+@socketio.on('appdata')
 def mouseMessage(data):
     emit('update value', data, broadcast=True)
     print(data)
-   
-
+ 
 #@socketio.on('mouse')
 #def mouseMessage(data):
  #   emit('my response', data, broadcast=True)

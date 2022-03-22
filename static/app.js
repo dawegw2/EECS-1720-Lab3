@@ -2,22 +2,29 @@ let button;
 let slider;
 let checkbox;
 let colorPicker;
+let sel;
+
+let brushChoice;
+
 let lineCol = 0;
 
 let socket;
 
-let triggerOnce = true;
+let lineSize;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     background(255);
-    //img = createImg('https://icons.iconarchive.com/icons/icons8/windows-8/64/Editing-Eraser-icon.png');
+    //img = createImg('https://icons.iconarchive.com/icons/designcontest/vintage/32/Eraser-icon.png');
 
-    fill(127,88,167);
+    fill(255);
     rect(10, 250, 30, 30);
+
     //image(img, 10, 250, 30, 30);
 
-    //lineCol = color(0, 0, 0);
+    fill(0, 0, 0);
+    textSize(10);
+    text('Eraser', 10, 268); 
 
     colorPicker = createColorPicker('black');
     colorPicker.position(10, 260);
@@ -26,19 +33,20 @@ function setup() {
     slider.position(5, 315);
     slider.style('width', '60px');
 
-    checkbox = createCheckbox('Eraser', false);
-    checkbox.position(5, 450);
-    checkbox.changed(eraserCheckedEvent);
-
     textAlign(CENTER);
+    sel = createSelect();
+    sel.position(10, 10);
+    sel.option('line');
+    sel.option('circle');
+    sel.option('square');
+    sel.selected('line');
+
+    //textAlign(CENTER);
     textSize(15);
+    fill(0);
     text('Size', 30, 220);
-    //text('Eraser', 30, 300);   
-    
-   // socket = io.connect('http://1127.0.0.1:5000'); //connect to the server
-   // socket.on('connect', function(){
-      //  socket.send('connected')
-    //});
+      
+    cursor(CROSS);
 
     socket = io();
     socket.connect('http://127.0.0.1:5000');
@@ -46,15 +54,12 @@ function setup() {
         socket.send('connected');
     });
 
-    socket.on('update value', newDrawing);
-}
-
-function draw() {
-    let lineSize = slider.value();
-    strokeWeight(lineSize);
+    socket.on('update values', newDrawing);
+    //socket.on('size value', newSize);
 
     //color buttons
-    noStroke();
+    //noStroke();
+    stroke(0);
     fill("red");
     rect(0, 0, 30, 30);
 
@@ -86,48 +91,66 @@ function draw() {
     rect(30, 120, 30, 30); 
 }
 
+//function newSize(size) {
+  //  strokeWeight(size);
+//}
+
+function newDrawing(data) {
+    noStroke();
+    if (data.brush == 'line') {
+        strokeWeight(data.size);
+        stroke(data.col);
+        line(data.x, data.y, data.pX, data.pY);
+    } else if (data.brush == 'circle') {
+        fill(data.col);
+        ellipse(data.x, data.y, data.size, data.size);
+    } else if (data.brush == 'square') {
+        fill(data.col);
+        rect(data.x, data.y, data.size, data.size);
+    }
+}
+
+function draw() {
+}
+
 function mouseDragged() {
+    lineSize = slider.value();
+    //strokeWeight(lineSize);
+    //socket.emit('size', lineSize);
+
     if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
         console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
+
+        brushChoice = sel.value();
 
         let data = {
             x: mouseX,
             y: mouseY,
             pX: pmouseX,
             pY: pmouseY,
-            col: lineCol
+            col: lineCol,
+            size: lineSize,
+            brush: brushChoice
         }
 
-        socket.emit('mouse', data);
+        socket.emit('appdata', data);
 
-        stroke(lineCol);
-        line(mouseX, mouseY, pmouseX, pmouseY);
-    }
-}
-
-function newDrawing(data) {
-    stroke(data.col);
-    line(data.x, data.y, data.pX, data.pY);
-}
-
-function changeStrokeSize() {
-    lineSize = this.value();
-}
-
-function eraserCheckedEvent() {
-    if (checkbox.checked()) {
-        lineCol = color(255, 255, 255);
-    } else {
-        lineCol = color(0, 0, 0);
+        noStroke();
+        if (brushChoice == 'line') {
+            strokeWeight(lineSize);
+            stroke(lineCol);
+            line(mouseX, mouseY, pmouseX, pmouseY);
+        } else if (brushChoice == 'circle') {
+            fill(lineCol);
+            ellipse(mouseX, mouseY, lineSize, lineSize);
+        } else if (brushChoice == 'square') {
+            fill(lineCol);
+            rect(mouseX, mouseY, lineSize, lineSize);
+        }
     }
 }
 
 function mousePressed() {
-    if (mouseX > 0 && mouseX < 60 && mouseY > 160 && mouseY < 190) {
-        lineCol = colorPicker.color();
-        cursor(CROSS);
-    }
-    
     if (mouseX > 0 && mouseX < 30 && mouseY > 0 && mouseY < 30) {
         lineCol = "red";
         cursor(CROSS);
@@ -169,6 +192,13 @@ function mousePressed() {
         cursor(CROSS);
     }
 
+    //Color picker
+    if (mouseX > 0 && mouseX < 60 && mouseY > 160 && mouseY < 190) {
+        lineCol = colorPicker.color();
+        cursor(CROSS);
+    }
+
+    //Eraser
     if (mouseX > 0 && mouseX < 60 && mouseY > 250 && mouseY < 280) {
         lineCol = "white";
         cursor('https://icons.iconarchive.com/icons/pixture/stationary/16/Eraser-2-icon.png');
