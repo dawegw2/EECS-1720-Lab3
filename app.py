@@ -3,12 +3,12 @@ from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins=['https://eecswebapp.herokuapp.com'])
 
 @app.route("/", methods=["GET","POST"])
 def index():
     # Render main HTML file 
-    return render_template("index.html", cors_allowed_origins="*")
+    return render_template("index.html") 
 
 @socketio.on('message')
 def handleMessage(msg):
