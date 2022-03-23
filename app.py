@@ -13,7 +13,7 @@ def index():
 @socketio.on('message')
 def handleMessage(msg):
     print('Message: ' + msg)
-    send(msg, broadcast=True)
+    emit(msg, broadcast=True)
 
 @socketio.on('appdata')
 def mouseMessage(data):
