@@ -51,7 +51,7 @@ function setup() {
     cursor(CROSS);
 
     socket = io();
-    socket.connect('https://eecswebapp.herokuapp.com/');
+    socket.connect('http://127.0.0.1:5000');
     socket.on('connect', function(){
         socket.send('connected');
     });
