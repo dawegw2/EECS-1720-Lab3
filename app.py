@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-@app.route("/")
+@app.route("/", methods=["GET","POST"])
 def index():
     # Render main HTML file 
     return render_template("index.html")
