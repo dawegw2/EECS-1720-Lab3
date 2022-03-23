@@ -24,15 +24,15 @@ function setup() {
     textSize(10);
     text('Eraser', 10, 298); 
 
-    button = createButton('Save');
+    button = createButton('Save'); //create the save button
     button.position(10, 450);
     button.mousePressed(saveCan);
 
-    colorPicker = createColorPicker('black');
+    colorPicker = createColorPicker('black'); //create the color picker
     colorPicker.position(12.5, 260);
 
     textAlign(CENTER);
-    sel = createSelect();
+    sel = createSelect(); //create the select tab for the brush styles
     sel.position(10, 300);
     sel.size(55, 20);
     sel.option('line');
@@ -40,7 +40,7 @@ function setup() {
     sel.option('square');
     sel.selected('line');
 
-    slider = createSlider(0, 18, 2);
+    slider = createSlider(0, 18, 2); //create the size slider
     slider.position(5, 340);
     slider.style('width', '60px');
 
@@ -110,11 +110,13 @@ function newDrawing(data) {
 function draw() {
 }
 
-function mouseDragged() {
+function mouseDragged() { //main drawing functions
     lineSize = slider.value();
 
+    console.log(lineCol);
+
     if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
-        console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
+        //console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
 
         brushChoice = sel.value();
 
@@ -189,10 +191,9 @@ function mousePressed() {
 
     //Color picker
     if (mouseX > 0 && mouseX < 60 && mouseY > 160 && mouseY < 190) {
-        lineCol = colorPicker.color();
+        lineCol = colorPicker.value();
         cursor(CROSS);
     }
-
     //Eraser
     if (mouseX > 0 && mouseX < 60 && mouseY > 280 && mouseY < 310) {
         lineCol = "white";
@@ -200,6 +201,6 @@ function mousePressed() {
     }   
 }
 
-function saveCan() {
+function saveCan() { //save canvas function
     saveCanvas(c, 'myCanvas', 'jpg');
 }

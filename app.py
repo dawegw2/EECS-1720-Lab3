@@ -7,7 +7,7 @@ socketio = SocketIO(app)
 
 @app.route("/")
 def index():
-    # Render HTML with count variable
+    # Render main HTML file 
     return render_template("index.html")
 
 @socketio.on('message')
@@ -17,14 +17,13 @@ def handleMessage(msg):
 
 @socketio.on('appdata')
 def mouseMessage(data):
-    emit('update value', data, broadcast=True)
+    emit('update values', data, broadcast=True)
     print(data)
- 
-#@socketio.on('mouse')
-#def mouseMessage(data):
- #   emit('my response', data, broadcast=True)
-  #  print('position: ' + data)
-  #  send(msg, broadcast=True)
+
+@socketio.on('size')
+def msizeMessage(size):
+    emit('size value', size, broadcast=True)
+    #print(size)
 
 if __name__ == "__main__":
     socketio.run(app)
