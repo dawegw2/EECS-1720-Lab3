@@ -11,40 +11,42 @@ let lineCol = 0;
 let socket;
 
 let lineSize;
+let c;
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    c = createCanvas(windowWidth, windowHeight);
     background(255);
-    //img = createImg('https://icons.iconarchive.com/icons/designcontest/vintage/32/Eraser-icon.png');
 
     fill(255);
-    rect(10, 250, 30, 30);
-
-    //image(img, 10, 250, 30, 30);
+    rect(10, 280, 30, 30);
 
     fill(0, 0, 0);
     textSize(10);
-    text('Eraser', 10, 268); 
+    text('Eraser', 10, 298); 
+
+    button = createButton('Save');
+    button.position(10, 450);
+    button.mousePressed(saveCan);
 
     colorPicker = createColorPicker('black');
-    colorPicker.position(10, 260);
-
-    slider = createSlider(0, 18, 2);
-    slider.position(5, 315);
-    slider.style('width', '60px');
+    colorPicker.position(12.5, 260);
 
     textAlign(CENTER);
     sel = createSelect();
-    sel.position(10, 10);
+    sel.position(10, 300);
+    sel.size(55, 20);
     sel.option('line');
     sel.option('circle');
     sel.option('square');
     sel.selected('line');
 
-    //textAlign(CENTER);
+    slider = createSlider(0, 18, 2);
+    slider.position(5, 340);
+    slider.style('width', '60px');
+
     textSize(15);
     fill(0);
-    text('Size', 30, 220);
+    text('Size', 30, 245);
       
     cursor(CROSS);
 
@@ -55,7 +57,6 @@ function setup() {
     });
 
     socket.on('update values', newDrawing);
-    //socket.on('size value', newSize);
 
     //color buttons
     //noStroke();
@@ -91,10 +92,6 @@ function setup() {
     rect(30, 120, 30, 30); 
 }
 
-//function newSize(size) {
-  //  strokeWeight(size);
-//}
-
 function newDrawing(data) {
     noStroke();
     if (data.brush == 'line') {
@@ -115,8 +112,6 @@ function draw() {
 
 function mouseDragged() {
     lineSize = slider.value();
-    //strokeWeight(lineSize);
-    //socket.emit('size', lineSize);
 
     if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
         console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
@@ -199,8 +194,12 @@ function mousePressed() {
     }
 
     //Eraser
-    if (mouseX > 0 && mouseX < 60 && mouseY > 250 && mouseY < 280) {
+    if (mouseX > 0 && mouseX < 60 && mouseY > 280 && mouseY < 310) {
         lineCol = "white";
         cursor('https://icons.iconarchive.com/icons/pixture/stationary/16/Eraser-2-icon.png');
     }   
+}
+
+function saveCan() {
+    saveCanvas(c, 'myCanvas', 'jpg');
 }
