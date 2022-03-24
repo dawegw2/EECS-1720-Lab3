@@ -1,14 +1,15 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
 
+async_mode = None
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
-socketio = SocketIO(app, cors_allowed_origins=['https://eecswebapp.herokuapp.com'])
+socketio = SocketIO(app, async_mode=async_mode)
 
 @app.route("/", methods=["GET","POST"])
 def index():
     # Render main HTML file 
-    return render_template("index.html", cors_allowed_origins=['https://eecswebapp.herokuapp.com']) 
+    return render_template("index.html", async_mode=socketio.async_mode) 
 
 @socketio.on('message')
 def handleMessage(msg):
