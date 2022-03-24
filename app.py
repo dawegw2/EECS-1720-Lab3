@@ -4,7 +4,7 @@ from flask_socketio import SocketIO, send, emit
 async_mode = None
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
-socketio = SocketIO(app, async_mode=async_mode)
+socketio = SocketIO(app, async_mode='eventlet')
 
 @app.route("/", methods=["GET","POST"])
 def index():
