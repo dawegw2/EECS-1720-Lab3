@@ -14,7 +14,7 @@ let lineSize;
 let c;
 
 function setup() {
-    c = createCanvas(windowWidth, windowHeight);
+    c = createCanvas(1250, 600);
     background(255);
 
     fill(255);

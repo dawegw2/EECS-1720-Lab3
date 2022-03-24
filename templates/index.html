@@ -9,27 +9,28 @@
 
     <script type="text/javascript" src="{{url_for('static', filename='p5.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='app.js')}}"></script>
-    <!--
-    <script>
-        socket = io();
-        socket.connect('http://127.0.0.1:5000');
-        socket.on('connect', function(){
-            socket.send('connected')
-        });
-
-        socket.on('message', function(msg){
-            console.log(msg)
-        })
-    </script>
-    -->
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: "Verdana", "sans-serif";
+            background-color: #282828;
+            color: aliceblue;
+        }
+    
+        h1 {
+            text-align: center;
+        }
+
+    </style>
+    
     </head>
 
     <body>   
     <div>
-        <h1>Welcome to the Collaborative Drawing Environment</h1><br>
+        <h1>Draw with Friends</h1><br>
     </div>
     </body>
 
