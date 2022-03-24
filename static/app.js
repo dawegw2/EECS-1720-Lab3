@@ -52,10 +52,11 @@ function setup() {
 
     socket = io();
     socket.connect('http://127.0.0.1:5000');
+    //sends 'connected' when the client connects to the server
     socket.on('connect', function(){
         socket.send('connected');
     });
-
+   
     socket.on('update values', newDrawing);
 
     //color buttons

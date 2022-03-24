@@ -1,26 +1,34 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, send, emit
 
-async_mode = None
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisasecret'
-socketio = SocketIO(app, async_mode=async_mode)
+#Initializing socketio
+socketio = SocketIO(app)
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/")
 def index():
     # Render main HTML file 
-    return render_template("index.html", async_mode=socketio.async_mode) 
+    return render_template("index.html")
 
+#conncect message event
 @socketio.on('message')
 def handleMessage(msg):
     print('Message: ' + msg)
     send(msg, broadcast=True)
 
+#event that sends data from client
 @socketio.on('appdata')
 def mouseMessage(data):
     emit('update values', data, broadcast=True)
     print(data)
 
+@socketio.on('size')
+def msizeMessage(size):
+    emit('size value', size, broadcast=True)
+    #print(size)
+
 if __name__ == "__main__":
-    socketio.run(app)
-    #app.run()
+    app.run()
+    #socketio.run(app)
+    
