@@ -1,17 +1,14 @@
 let button;
 let slider;
-let checkbox;
 let colorPicker;
 let sel;
 
 let brushChoice;
-
 let lineCol = 0;
-
-let socket;
-
 let lineSize;
 let c;
+
+let socket;
 
 function setup() {
     c = createCanvas(1250, 600);
