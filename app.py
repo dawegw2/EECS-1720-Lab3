@@ -23,12 +23,6 @@ def mouseMessage(data):
     emit('update values', data, broadcast=True)
     print(data)
 
-@socketio.on('size')
-def msizeMessage(size):
-    emit('size value', size, broadcast=True)
-    #print(size)
-
 if __name__ == "__main__":
     app.run()
-    #socketio.run(app)
     

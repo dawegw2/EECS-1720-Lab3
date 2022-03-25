@@ -41,7 +41,7 @@ function setup() {
     sel.selected('line');
 
     slider = createSlider(0, 18, 2); //create the size slider
-    slider.position(5, 340);
+    slider.position(5, 345);
     slider.style('width', '60px');
 
     textSize(15);
@@ -57,6 +57,7 @@ function setup() {
         socket.send('connected');
     });
    
+    //receives data from server and runs newDrawing function with the data values
     socket.on('update values', newDrawing);
 
     //color buttons
@@ -93,7 +94,7 @@ function setup() {
     rect(30, 120, 30, 30); 
 }
 
-function newDrawing(data) {
+function newDrawing(data) { // draws to the canvas using the recieved data from another open client
     noStroke();
     if (data.brush == 'line') {
         strokeWeight(data.size);
@@ -111,11 +112,12 @@ function newDrawing(data) {
 function draw() {
 }
 
-function mouseDragged() { //main drawing functions
+function mouseDragged() { // main drawing functions 
     lineSize = slider.value();
 
     console.log(lineCol);
 
+    // draws to canvas when mouse is pressed and dragged)
     if (mouseIsPressed && mouseButton == LEFT && mouseX > 70) {
         //console.log(mouseX + "," + mouseY + '//' + pmouseX + "," + pmouseY);
 
@@ -131,6 +133,7 @@ function mouseDragged() { //main drawing functions
             brush: brushChoice
         }
 
+        // sends data to the server
         socket.emit('appdata', data);
 
         noStroke();
@@ -148,7 +151,7 @@ function mouseDragged() { //main drawing functions
     }
 }
 
-function mousePressed() {
+function mousePressed() { 
     if (mouseX > 0 && mouseX < 30 && mouseY > 0 && mouseY < 30) {
         lineCol = "red";
         cursor(CROSS);
